@@ -1,6 +1,8 @@
 package com.mcai8sh4.nemesis.entity.mob;
 
 import com.mcai8sh4.nemesis.Game;
+import com.mcai8sh4.nemesis.entity.projectile.PlayerProjectile;
+import com.mcai8sh4.nemesis.entity.projectile.Projectile;
 import com.mcai8sh4.nemesis.graphics.Screen;
 import com.mcai8sh4.nemesis.graphics.Sprite;
 import com.mcai8sh4.nemesis.input.Keyboard;
@@ -16,6 +18,9 @@ public class Player extends Mob {
     private int anim = 0;
     private boolean walking = false;
 
+    Projectile p;
+    private int fireRate = 0;
+
     public Player(Keyboard input) {
         this.input = input;
         sprite = Sprite.player_back;
@@ -26,9 +31,11 @@ public class Player extends Mob {
         this.y = y;
         this.input = input;
         sprite = Sprite.player_back;
+        fireRate = PlayerProjectile.FIRE_RATE;
     }
 
     public void update() {
+        if (fireRate > 0) fireRate--;
         int xa = 0, ya = 0;
         int speed = 2; // Player movement speed
         int running; // value to increase speed - ie. running incrementation
@@ -42,23 +49,31 @@ public class Player extends Mob {
         if (input.down) ya += speed + running;
         if (input.left) xa -= speed + running;
         if (input.right) xa += speed + running;
-        
+
         if (xa != 0 || ya != 0) {
             move(xa, ya);
             walking = true;
         } else {
             walking = false;
         }
-        
+        clear();
         updateShooting();
     }
 
+    private void clear() {
+        for (int i = 0; i < level.getProjectiles().size(); i++) {
+            Projectile p = level.getProjectiles().get(i);
+            if (p.isRemoved()) level.getProjectiles().remove(i);
+        }
+    }
+
     private void updateShooting() {
-        if (Mouse.getButton() == 1){
-            double dx = Mouse.getX() -  (Game.getWindowWidth() / 2);
+        if (Mouse.getButton() == 1 && fireRate <= 0) {
+            double dx = Mouse.getX() - (Game.getWindowWidth() / 2);
             double dy = Mouse.getY() - (Game.getWindowHeight() / 2);
             double dir = Math.atan2(dy, dx);
             shoot(x, y, dir);
+            fireRate = PlayerProjectile.FIRE_RATE;
         }
 
     }

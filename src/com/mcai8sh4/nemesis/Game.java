@@ -109,6 +109,7 @@ public class Game extends Canvas implements Runnable {
     public void update() {
         key.update();
         player.update();
+        level.update();
 
         if (key.quit) System.exit(0);
     }
@@ -143,7 +144,7 @@ public class Game extends Canvas implements Runnable {
     );
     g.drawString("X: "+player.x+", Y: "+player.y+Screen.msg_1,10,15);
     g.drawString(Screen.msg,10,32);
-    g.fillRect(Mouse.getX()-32,Mouse.getY()-32,64,64);
+    g.drawRect(Mouse.getX()-32,Mouse.getY()-32,64,64);
     if(Mouse.getButton()!=-1)g.drawString("Mouse : "+Mouse.getButton(),10,49);
     g.dispose();
     bs.show();
