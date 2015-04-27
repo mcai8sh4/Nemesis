@@ -3,6 +3,7 @@ package com.mcai8sh4.nemesis;
 import com.mcai8sh4.nemesis.entity.mob.Player;
 import com.mcai8sh4.nemesis.graphics.Screen;
 import com.mcai8sh4.nemesis.input.Keyboard;
+import com.mcai8sh4.nemesis.input.Mouse;
 import com.mcai8sh4.nemesis.level.Level;
 import com.mcai8sh4.nemesis.level.TileCoordinate;
 
@@ -13,9 +14,9 @@ import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
 
 public class Game extends Canvas implements Runnable {
-    public static int width = 300;
-    public static int height = width / 16 * 9;
-    public static int scale = 3;
+    private static int width = 300;
+    private static int height = width / 16 * 9;
+    private static int scale = 3;
 
     public static String title = "Nemesis";
 
@@ -39,11 +40,23 @@ public class Game extends Canvas implements Runnable {
         screen = new Screen(width, height);
         frame = new JFrame();
         key = new Keyboard();
-        level = level.spawn;
+        level = Level.spawn;
         TileCoordinate player_spawn = new TileCoordinate(27, 4);
-        player = new Player(player_spawn.x(), player_spawn.y(),  key);
+        player = new Player(player_spawn.x(), player_spawn.y(), key);
         player.init(level);
         addKeyListener(key);
+        Mouse mouse = new Mouse();
+        addMouseListener(mouse);
+        addMouseMotionListener(mouse);
+    }
+
+
+    public static int getWindowWidth() {
+        return width * scale;
+    }
+
+    public static int getWindowHeight(){
+        return height*scale;
     }
 
     public synchronized void start() {
@@ -107,23 +120,34 @@ public class Game extends Canvas implements Runnable {
             return;
         }
 
-        screen.clear();
-        int xScroll = player.x - screen.width / 2;
-        int yScroll = player.y - screen.height / 2;
-        level.render(xScroll, yScroll, screen);
-        player.render(screen);
 
-        System.arraycopy(screen.pixels, 0, pixels, 0, pixels.length);
+    screen.clear();
+    int xScroll = player.x - screen.width / 2;
+    int yScroll = player.y - screen.height / 2;
+    level.render(xScroll,yScroll,screen);
+    player.render(screen);
 
-        Graphics g = bs.getDrawGraphics();
-        g.drawImage(image, 0, 0, getWidth(), getHeight(), null);
-        g.setColor(Color.CYAN);
-        g.setFont(new Font("Verdana", 0, 12));
-        g.drawString("X: " + player.x + ", Y: " + player.y + Screen.msg_1, 10, 15);
-        g.drawString(screen.msg, 10, 32);
-        g.dispose();
-        bs.show();
-    }
+    System.arraycopy(screen.pixels,0,pixels,0,pixels.length);
+
+    Graphics g = bs.getDrawGraphics();
+    g.drawImage(image,0,0,
+
+    getWidth(),getHeight
+
+    (),null);
+    g.setColor(Color.CYAN);
+    g.setFont(new
+
+    Font("Verdana",0,12)
+
+    );
+    g.drawString("X: "+player.x+", Y: "+player.y+Screen.msg_1,10,15);
+    g.drawString(Screen.msg,10,32);
+    g.fillRect(Mouse.getX()-32,Mouse.getY()-32,64,64);
+    if(Mouse.getButton()!=-1)g.drawString("Mouse : "+Mouse.getButton(),10,49);
+    g.dispose();
+    bs.show();
+}
 
     public static void main(String[] args) {
         Game game = new Game();

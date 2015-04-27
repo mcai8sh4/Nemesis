@@ -8,7 +8,7 @@ import java.awt.event.KeyListener;
 public class Keyboard implements KeyListener {
 
     private boolean[] keys = new boolean[120];
-    public boolean up, down, left, right, quit;
+    public boolean up, down, left, right, run, quit;
 
     public void update() {
         up = keys[KeyEvent.VK_UP]  || keys[KeyEvent.VK_W];
@@ -19,7 +19,7 @@ public class Keyboard implements KeyListener {
     for (int i =0; i < keys.length; i++){
         if (keys[i])  Screen.msg_1 = " Key: "+ KeyEvent.getKeyText(i);
     }
-
+        run = keys[KeyEvent.VK_SHIFT];
         quit = keys[KeyEvent.VK_ESCAPE];
     }
 
