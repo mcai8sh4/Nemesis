@@ -5,7 +5,7 @@ import com.mcai8sh4.nemesis.graphics.Sprite;
 
 public class PlayerProjectile extends Projectile {
 
-    public static final int FIRE_RATE = 10;
+    public static final int FIRE_RATE = 15;
 
     public PlayerProjectile(int x, int y, double dir) {
         super(x, y, dir);
