@@ -9,7 +9,7 @@ public abstract class Entity {
     public int x, y;
     private boolean removed = false;
     protected Level level;
-    protected final Random ramdom = new Random();
+    protected final Random random = new Random();
 
     public void update() {
     }

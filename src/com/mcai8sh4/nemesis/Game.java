@@ -2,6 +2,7 @@ package com.mcai8sh4.nemesis;
 
 import com.mcai8sh4.nemesis.entity.mob.Player;
 import com.mcai8sh4.nemesis.graphics.Screen;
+import com.mcai8sh4.nemesis.graphics.Sprite;
 import com.mcai8sh4.nemesis.input.Keyboard;
 import com.mcai8sh4.nemesis.input.Mouse;
 import com.mcai8sh4.nemesis.level.Level;
@@ -12,6 +13,7 @@ import java.awt.*;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
+import java.util.Random;
 
 public class Game extends Canvas implements Runnable {
     private static int width = 300;
@@ -55,8 +57,8 @@ public class Game extends Canvas implements Runnable {
         return width * scale;
     }
 
-    public static int getWindowHeight(){
-        return height*scale;
+    public static int getWindowHeight() {
+        return height * scale;
     }
 
     public synchronized void start() {
@@ -122,33 +124,43 @@ public class Game extends Canvas implements Runnable {
         }
 
 
-    screen.clear();
-    int xScroll = player.x - screen.width / 2;
-    int yScroll = player.y - screen.height / 2;
-    level.render(xScroll,yScroll,screen);
-    player.render(screen);
+        screen.clear();
+        int xScroll = player.x - screen.width / 2;
+        int yScroll = player.y - screen.height / 2;
+        level.render(xScroll, yScroll, screen);
+        player.render(screen);
 
-    System.arraycopy(screen.pixels,0,pixels,0,pixels.length);
 
-    Graphics g = bs.getDrawGraphics();
-    g.drawImage(image,0,0,
+        // DELETE ME JUST A TEST
+//        Sprite sprite = new Sprite(2, 2, 0xffffff);
+//        Random random = new Random();
+//        for (int i = 0; i < 100; i++) {
+//            int x = random.nextInt(25);
+//            int y = random.nextInt(25);
+//            screen.renderSprite(365 + x, 18 + y, sprite, true);
+//        }
 
-    getWidth(),getHeight
+        System.arraycopy(screen.pixels, 0, pixels, 0, pixels.length);
 
-    (),null);
-    g.setColor(Color.CYAN);
-    g.setFont(new
+        Graphics g = bs.getDrawGraphics();
+        g.drawImage(image, 0, 0,
 
-    Font("Verdana",0,12)
+                           getWidth(), getHeight
 
-    );
-    g.drawString("X: "+player.x+", Y: "+player.y+Screen.msg_1,10,15);
-    g.drawString(Screen.msg,10,32);
-    g.drawRect(Mouse.getX()-32,Mouse.getY()-32,64,64);
-    if(Mouse.getButton()!=-1)g.drawString("Mouse : "+Mouse.getButton(),10,49);
-    g.dispose();
-    bs.show();
-}
+                                               (), null);
+        g.setColor(Color.CYAN);
+        g.setFont(new
+
+                          Font("Verdana", 0, 12)
+
+        );
+        g.drawString("X: " + player.x + ", Y: " + player.y + Screen.msg_1, 10, 15);
+        g.drawString(Screen.msg, 10, 32);
+        g.drawRect(Mouse.getX() - 32, Mouse.getY() - 32, 64, 64);
+        if (Mouse.getButton() != -1) g.drawString("Mouse : " + Mouse.getButton(), 10, 49);
+        g.dispose();
+        bs.show();
+    }
 
     public static void main(String[] args) {
         Game game = new Game();

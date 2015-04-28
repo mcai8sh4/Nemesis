@@ -1,5 +1,7 @@
 package com.mcai8sh4.nemesis.entity.projectile;
 
+import com.mcai8sh4.nemesis.entity.spawner.ParticleSpawner;
+import com.mcai8sh4.nemesis.entity.spawner.Spawner;
 import com.mcai8sh4.nemesis.graphics.Screen;
 import com.mcai8sh4.nemesis.graphics.Sprite;
 
@@ -10,7 +12,7 @@ public class PlayerProjectile extends Projectile {
     public PlayerProjectile(int x, int y, double dir) {
         super(x, y, dir);
         range = 200; //random.nextInt(100) + 50;
-        speed = 4;
+        speed = 5;
         damage = 20;
         sprite = Sprite.projectile_player;
         nx = speed * Math.cos(angle);
@@ -19,14 +21,17 @@ public class PlayerProjectile extends Projectile {
     }
 
     public void update() {
-        if(level.tileCollision(x, y, nx, ny, 7)) remove();
-            move();
+        if (level.tileCollision((int)(x + nx), (int)(y + ny), 7, 5, 4)) {
+            remove();
+            level.add(new ParticleSpawner((int) x, (int) y, 44, 30, level));
+        }
+        move();
     }
 
     protected void move() {
-            x += nx;
-            y += ny;
-            if (distance() > range) remove();
+        x += nx;
+        y += ny;
+        if (distance() > range) remove();
 
     }
 

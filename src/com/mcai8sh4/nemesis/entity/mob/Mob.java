@@ -1,6 +1,7 @@
 package com.mcai8sh4.nemesis.entity.mob;
 
 import com.mcai8sh4.nemesis.entity.Entity;
+import com.mcai8sh4.nemesis.entity.Particle.Particle;
 import com.mcai8sh4.nemesis.entity.projectile.PlayerProjectile;
 import com.mcai8sh4.nemesis.entity.projectile.Projectile;
 import com.mcai8sh4.nemesis.graphics.Screen;
@@ -31,7 +32,6 @@ public abstract class Mob extends Entity {
         if (ya < 0) dir = 0;
 
         if (!collision(xa, ya)) {
-
             x += xa;
             y += ya;
         }
@@ -44,7 +44,7 @@ public abstract class Mob extends Entity {
     protected void shoot(int x, int y, double dir) {
 //        System.out.println("Angle : "+ Math.toDegrees(dir));
         Projectile p = new PlayerProjectile(x, y, dir);
-        level.addProjectile(p);
+        level.add(p);
 
     }
 
