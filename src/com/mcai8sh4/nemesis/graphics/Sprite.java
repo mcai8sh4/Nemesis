@@ -6,7 +6,7 @@ public class Sprite {
     private int x, y;
     private int width, height;
     public int[] pixels;
-    private SpriteSheet sheet;
+    protected SpriteSheet sheet;
 
     public static Sprite grass = new Sprite(16, 0, 0, SpriteSheet.tiles);
     public static Sprite flower = new Sprite(16, 1, 0, SpriteSheet.tiles);
@@ -32,11 +32,21 @@ public class Sprite {
     public static Sprite player_side = new Sprite(32, 6, 6, SpriteSheet.tiles);
     public static Sprite player_side_1 = new Sprite(32, 6, 7, SpriteSheet.tiles);
 
+    public static Sprite dummy = new Sprite(32, 0, 0, SpriteSheet.dummy_down);
+
     // Projectile sprites
     public static Sprite projectile_player = new Sprite(16, 0, 0, SpriteSheet.projectile_player);
 
     // Particle Sprites
     public static Sprite particle_normal = new Sprite(3, 0xAAAAAA);
+
+    protected Sprite(SpriteSheet sheet, int width, int height) {
+        SIZE = (width == height) ? width : -1;
+        this.width = width;
+        this.height = height;
+        this.sheet = sheet;
+
+    }
 
     public Sprite(int size, int x, int y, SpriteSheet sheet) {
         SIZE = size;
@@ -49,7 +59,7 @@ public class Sprite {
         load();
     }
 
-    public Sprite(int width, int height, int colour){
+    public Sprite(int width, int height, int colour) {
         SIZE = -1;
         this.width = width;
         this.height = height;
@@ -65,13 +75,20 @@ public class Sprite {
         setColour(colour);
     }
 
+    public Sprite(int[] pixels, int width, int height) {
+        SIZE = (width == height) ? width : -1;
+        this.width = width;
+        this.height = height;
+        this.pixels = pixels;
+    }
+
     private void setColour(int colour) {
         for (int i = 0; i < width * height; i++) {
             pixels[i] = colour;
         }
     }
 
-    public int getWidth(){
+    public int getWidth() {
         return width;
     }
 
@@ -80,9 +97,9 @@ public class Sprite {
     }
 
     private void load() {
-        for (int y = 0; y < SIZE; y++) {
-            for (int x = 0; x < SIZE; x++) {
-                pixels[x + y * SIZE] = sheet.pixels[(x + this.x) + (y + this.y) * sheet.SIZE];
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                pixels[x + y * width] = sheet.pixels[(x + this.x) + (y + this.y) * sheet.WIDTH];
             }
         }
     }

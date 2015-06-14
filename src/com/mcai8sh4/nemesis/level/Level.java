@@ -2,6 +2,7 @@ package com.mcai8sh4.nemesis.level;
 
 import com.mcai8sh4.nemesis.entity.Entity;
 import com.mcai8sh4.nemesis.entity.Particle.Particle;
+import com.mcai8sh4.nemesis.entity.mob.Player;
 import com.mcai8sh4.nemesis.entity.projectile.Projectile;
 import com.mcai8sh4.nemesis.graphics.Screen;
 import com.mcai8sh4.nemesis.level.tile.Tile;
@@ -19,6 +20,8 @@ public class Level {
     private List<Entity> entities = new ArrayList<Entity>();
     private List<Projectile> projectiles = new ArrayList<Projectile>();
     private List<Particle> particles = new ArrayList<Particle>();
+
+    private List<Player> players = new ArrayList<Player>();
 
     public Level(int width, int height) {
         this.width = width;
@@ -51,6 +54,9 @@ public class Level {
         for (int i = 0; i < particles.size(); i++) {
             particles.get(i).update();
         }
+        for (int i = 0; i < players.size(); i++) {
+            players.get(i).update();
+        }
         remove();
     }
 
@@ -63,6 +69,9 @@ public class Level {
         }
         for (int i = 0; i < particles.size(); i++) {
             if (particles.get(i).isRemoved()) particles.remove(i);
+        }
+        for (int i = 0; i < players.size(); i++) {
+            if (players.get(i).isRemoved()) players.remove(i);
         }
     }
 
@@ -105,6 +114,9 @@ public class Level {
         for (int i = 0; i < particles.size(); i++) {
             particles.get(i).render(screen);
         }
+        for (int i = 0; i < players.size(); i++) {
+            players.get(i).render(screen);
+        }
     }
 
     public void add(Entity e) {
@@ -113,11 +125,57 @@ public class Level {
             particles.add((Particle) e);
         } else if (e instanceof Projectile) {
             projectiles.add((Projectile) e);
+        } else if (e instanceof Player) {
+            players.add((Player) e);
         } else {
             entities.add(e);
         }
     }
 
+    public List<Player> getPlayers() {
+        return players;
+    }
+
+    public Player getPlayerAt(int index) {
+        return players.get(index);
+    }
+
+    public Player getClientPlayer() {
+        return players.get(0);
+    }
+
+    public List<Entity> getEntities(Entity e, int radius) {
+        List<Entity> result = new ArrayList<Entity>();
+        int ex = (int) e.getX();
+        int ey = (int) e.getY();
+        for (int i = 0; i < entities.size(); i++) {
+            Entity entity = entities.get(i);
+            int x = (int) entity.getX();
+            int y = (int) entity.getY();
+            int dx = Math.abs(x - ex);
+            int dy = Math.abs(y - ey);
+            double distance = Math.sqrt((dx * dx) + (dy * dy));
+            if (distance <= radius) result.add(entity);
+        }
+        return result;
+    }
+
+    public List<Player> getPlayers(Entity e, int radius) {
+        List<Player> result = new ArrayList<Player>();
+        int ex = (int) e.getX();
+        int ey = (int) e.getY();
+        for (int i = 0; i < players.size(); i++) {
+            Player p = players.get(i);
+            int x = (int) p.getX();
+            int y = (int) p.getY();
+            int dx = Math.abs(x - ex);
+            int dy = Math.abs(y - ey);
+            double distance = Math.sqrt((dx * dx) + (dy * dy));
+            if (distance <= radius) result.add(p);
+
+        }
+        return result;
+    }
 
     public Tile getTile(int x, int y) {
         if (x < 0 || y < 0 || x >= width || y >= height) return Tile.voidTile;
@@ -125,6 +183,7 @@ public class Level {
         if (tiles[x + y * width] == Tile.col_spawn_grass) return Tile.spawnGrass;
         if (tiles[x + y * width] == Tile.col_spawn_flower) return Tile.spawnFlower;
         if (tiles[x + y * width] == Tile.col_spawn_rock) return Tile.spawnRock;
+        if (tiles[x + y * width] == Tile.col_spawn_special_wall) return Tile.spawnSpecialWall;
         if (tiles[x + y * width] == Tile.col_spawn_wall) return Tile.spawnWall;
         if (tiles[x + y * width] == Tile.col_spawn_water) return Tile.spawnWater;
         return Tile.voidTile;

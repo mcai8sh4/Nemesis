@@ -1,5 +1,7 @@
 package com.mcai8sh4.nemesis.graphics;
 
+import com.mcai8sh4.nemesis.entity.mob.Chaser;
+import com.mcai8sh4.nemesis.entity.mob.Mob;
 import com.mcai8sh4.nemesis.entity.projectile.Projectile;
 import com.mcai8sh4.nemesis.level.tile.Tile;
 
@@ -33,6 +35,22 @@ public class Screen {
         for (int i = 0; i < pixels.length; i++) {
             pixels[i] = 0;
         }
+    }
+
+    public void renderSheet(int xp, int yp, SpriteSheet sheet, boolean fixed) {
+        if (fixed) {
+            xp -= xOffset;
+            yp -= yOffset;
+        }
+        for (int y = 0; y < sheet.HEIGHT; y++) {
+            int ya = y + yp;
+            for (int x = 0; x < sheet.WIDTH; x++) {
+                int xa = x + xp;
+                if (xa < 0 || xa >= width || ya < 0 || ya >= height) continue;
+                pixels[xa + ya * width] = sheet.pixels[x + y * sheet.WIDTH];
+            }
+        }
+
     }
 
 
@@ -81,7 +99,7 @@ public class Screen {
         }
     }
 
-    public void renderPlayer(int xp, int yp, Sprite sprite, int flip) {
+    public void renderMob(int xp, int yp, Sprite sprite, int flip) {
         xp -= xOffset;
         yp -= yOffset;
         for (int y = 0; y < 32; y++) {
@@ -99,7 +117,23 @@ public class Screen {
             }
         }
     }
-
+    public void renderMob(int xp, int yp, Mob mob) {
+        xp -= xOffset;
+        yp -= yOffset;
+        for (int y = 0; y < 32; y++) {
+            int ya = y + yp;
+            int ys = y;
+            for (int x = 0; x < 32; x++) {
+                int xa = x + xp;
+                int xs = x;
+                if (xa < -32 || xa >= width || ya < 0 || ya >= height) break;
+                if (xa < 0) xa = 0;
+                int col = mob.getSprite().pixels[xs + ys * 32];
+                if (mob instanceof Chaser && col == 0xFF472BBF) col = 0xffBA0015;
+                if (col != 0xFFFF00FF) pixels[xa + ya * width] = col;
+            }
+        }
+    }
     public void setOffset(int xOffset, int yOffset) {
         this.xOffset = xOffset;
         this.yOffset = yOffset;

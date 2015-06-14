@@ -1,5 +1,8 @@
 package com.mcai8sh4.nemesis.level;
 
+import com.mcai8sh4.nemesis.entity.mob.Chaser;
+import com.mcai8sh4.nemesis.entity.mob.Dummy;
+
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -23,6 +26,9 @@ public class SpawnLevel extends Level {
             e.printStackTrace();
             System.out.println("Exception! Could not load Level File");
         }
+        for (int i = 0; i < 5; i++)
+            add(new Dummy(20, 5));
+        add(new Chaser(20, 6));
     }
 
 

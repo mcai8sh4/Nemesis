@@ -2,7 +2,7 @@ package com.mcai8sh4.nemesis;
 
 import com.mcai8sh4.nemesis.entity.mob.Player;
 import com.mcai8sh4.nemesis.graphics.Screen;
-import com.mcai8sh4.nemesis.graphics.Sprite;
+import com.mcai8sh4.nemesis.graphics.SpriteSheet;
 import com.mcai8sh4.nemesis.input.Keyboard;
 import com.mcai8sh4.nemesis.input.Mouse;
 import com.mcai8sh4.nemesis.level.Level;
@@ -13,7 +13,6 @@ import java.awt.*;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
-import java.util.Random;
 
 public class Game extends Canvas implements Runnable {
     private static int width = 300;
@@ -43,9 +42,12 @@ public class Game extends Canvas implements Runnable {
         frame = new JFrame();
         key = new Keyboard();
         level = Level.spawn;
+
         TileCoordinate player_spawn = new TileCoordinate(27, 4);
         player = new Player(player_spawn.x(), player_spawn.y(), key);
-        player.init(level);
+        level.add(player);
+
+
         addKeyListener(key);
         Mouse mouse = new Mouse();
         addMouseListener(mouse);
@@ -110,7 +112,6 @@ public class Game extends Canvas implements Runnable {
 
     public void update() {
         key.update();
-        player.update();
         level.update();
 
         if (key.quit) System.exit(0);
@@ -125,10 +126,10 @@ public class Game extends Canvas implements Runnable {
 
 
         screen.clear();
-        int xScroll = player.x - screen.width / 2;
-        int yScroll = player.y - screen.height / 2;
-        level.render(xScroll, yScroll, screen);
-        player.render(screen);
+        double xScroll = player.getX() - screen.width / 2;
+        double yScroll = player.getY() - screen.height / 2;
+        level.render((int)xScroll, (int)yScroll, screen);
+      // screen.renderSheet(40,40, SpriteSheet.player_down, false);
 
 
         // DELETE ME JUST A TEST
@@ -154,10 +155,11 @@ public class Game extends Canvas implements Runnable {
                           Font("Verdana", 0, 12)
 
         );
-        g.drawString("X: " + player.x + ", Y: " + player.y + Screen.msg_1, 10, 15);
+        g.drawString("X: " + player.getX() + ", Y: " + player.getY() + Screen.msg_1, 10, 15);
         g.drawString(Screen.msg, 10, 32);
-        g.drawRect(Mouse.getX() - 32, Mouse.getY() - 32, 64, 64);
         if (Mouse.getButton() != -1) g.drawString("Mouse : " + Mouse.getButton(), 10, 49);
+        g.setColor(Color.ORANGE);
+        g.fillRect(Mouse.getX() - 8, Mouse.getY() - 8, 16, 16);
         g.dispose();
         bs.show();
     }

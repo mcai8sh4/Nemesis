@@ -17,6 +17,7 @@ public class Tile {
     public static Tile spawnGrass = new SpawnGrassTile(Sprite.spawn_grass);
     public static Tile spawnFlower = new SpawnFlowerTile(Sprite.spawn_flower);
     public static Tile spawnRock = new SpawnRockTile(Sprite.spawn_rock);
+    public static Tile spawnSpecialWall = new SpawnWallSpecialTile(Sprite.spawn_wall);
     public static Tile spawnWall = new SpawnWallTile(Sprite.spawn_wall);
     public static Tile spawnFloor = new SpawnFloorTile(Sprite.spawn_floor);
     public static Tile spawnWater = new SpawnWaterTile(Sprite.spawn_water);
@@ -24,8 +25,9 @@ public class Tile {
 
     public static final int col_spawn_grass = 0xff00ff00;
     public static final int col_spawn_flower = 0xffffff00;
-    public static final int col_spawn_rock = 0xff7f7f00;
+    public static final int col_spawn_rock = 0xff505050;
     public static final int col_spawn_wall = 0xff808080;
+    public static final int col_spawn_special_wall = 0xff909090;
     public static final int col_spawn_floor = 0xff666600;
     public static final int col_spawn_water = 0xff0000ff;
 

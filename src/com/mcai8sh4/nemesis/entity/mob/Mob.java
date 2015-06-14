@@ -1,24 +1,25 @@
 package com.mcai8sh4.nemesis.entity.mob;
 
 import com.mcai8sh4.nemesis.entity.Entity;
-import com.mcai8sh4.nemesis.entity.Particle.Particle;
 import com.mcai8sh4.nemesis.entity.projectile.PlayerProjectile;
 import com.mcai8sh4.nemesis.entity.projectile.Projectile;
 import com.mcai8sh4.nemesis.graphics.Screen;
 import com.mcai8sh4.nemesis.graphics.Sprite;
 import com.mcai8sh4.nemesis.level.tile.Tile;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public abstract class Mob extends Entity {
 
-    protected Sprite sprite;
-    protected int dir = 2;
+    //  protected Sprite sprite;
     protected boolean moving = false;
 
+    protected enum Direction {
+        UP, DOWN, LEFT, RIGHT
+    }
 
-    public void move(int xa, int ya) {
+    protected Direction dir;
+
+
+    public void move(double xa, double ya) {
 
         if (xa != 0 && ya != 0) {
             move(xa, 0);
@@ -26,48 +27,75 @@ public abstract class Mob extends Entity {
             return;
         }
 
-        if (xa > 0) dir = 1;
-        if (xa < 0) dir = 3;
-        if (ya > 0) dir = 2;
-        if (ya < 0) dir = 0;
+        if (xa > 0) dir = Direction.RIGHT;
+        if (xa < 0) dir = Direction.LEFT;
+        if (ya > 0) dir = Direction.DOWN;
+        if (ya < 0) dir = Direction.UP;
 
-        if (!collision(xa, ya)) {
-            x += xa;
-            y += ya;
+        while(xa != 0){
+            if(Math.abs(xa) > 1){
+                if (!collision(abs(xa), ya)) {
+                    this.x += abs(xa);
+                }
+                xa -= abs(xa);
+            } else {
+                if (!collision(abs(xa), ya)) {
+                    this.x += xa;
+                }
+                xa =0;
+            }
         }
+
+        while(ya != 0){
+            if(Math.abs(ya) > 1){
+                if (!collision(xa, abs(ya))) {
+                    this.y += abs(ya);
+                }
+                ya -= abs(ya);
+            } else {
+                if (!collision(xa, abs(ya))) {
+                    this.y += ya;
+                }
+                ya =0;
+            }
+        }
+
+
+
     }
 
-    public void update() {
-
+    private int abs(double value) {
+        if (value < 0) return -1;
+        return 1;
     }
 
-    protected void shoot(int x, int y, double dir) {
+    public abstract void update();
+
+    protected void shoot(double x, double y, double dir) {
 //        System.out.println("Angle : "+ Math.toDegrees(dir));
         Projectile p = new PlayerProjectile(x, y, dir);
         level.add(p);
 
     }
 
-    private boolean collision(int xa, int ya) {
+    private boolean collision(double xa, double ya) {
         boolean solid = false;
         for (int c = 0; c < 4; c++) {
-            int xt = ((x + xa) + c % 2 * 14 - 8) / 16;
-            int yt = ((y + ya) + c / 2 * 12) / 16;
-            if (level.getTile(xt, yt).solid()) solid = true;
+            double xt = ((x + xa) - c % 2 * 16) / 16;
+            double yt = ((y + ya) - c / 2 * 16) / 16;
+            int ix = (int) Math.ceil(xt);
+            int iy = (int) Math.ceil(yt);
+            if (c % 2 == 0) ix = (int) Math.floor(xt);
+            if (c / 2 == 0) iy = (int) Math.floor(yt);
+            if (level.getTile(ix, iy).solid()) solid = true;
 
-            //debug info
-            if (level.getTile(xt, yt) == Tile.voidTile) Screen.msg = "oops! Player out of bounds - Freedom!!";
-            if (level.getTile(xt, yt) == Tile.spawnFlower) Screen.msg = "Flower";
-            if (level.getTile(xt, yt) == Tile.spawnFloor) Screen.msg = "Floor";
-            if (level.getTile(xt, yt) == Tile.spawnGrass) Screen.msg = "Grass";
-            if (level.getTile(xt, yt) == Tile.spawnWater) Screen.msg = "Water";
+
         }
-        if (solid) Screen.msg = "Collision";
+
         return solid;
     }
 
-    public void render() {
-    }
+    public abstract void render(Screen screen);
 
 
 }

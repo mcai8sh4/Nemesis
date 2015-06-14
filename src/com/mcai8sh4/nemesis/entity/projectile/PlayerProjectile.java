@@ -1,15 +1,14 @@
 package com.mcai8sh4.nemesis.entity.projectile;
 
 import com.mcai8sh4.nemesis.entity.spawner.ParticleSpawner;
-import com.mcai8sh4.nemesis.entity.spawner.Spawner;
 import com.mcai8sh4.nemesis.graphics.Screen;
 import com.mcai8sh4.nemesis.graphics.Sprite;
 
 public class PlayerProjectile extends Projectile {
 
-    public static final int FIRE_RATE = 15;
+    public static final int FIRE_RATE = 10;
 
-    public PlayerProjectile(int x, int y, double dir) {
+    public PlayerProjectile(double x, double y, double dir) {
         super(x, y, dir);
         range = 200; //random.nextInt(100) + 50;
         speed = 5;

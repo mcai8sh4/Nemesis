@@ -1,14 +1,18 @@
 package com.mcai8sh4.nemesis.entity.mob;
 
 import com.mcai8sh4.nemesis.Game;
+import com.mcai8sh4.nemesis.entity.Entity;
 import com.mcai8sh4.nemesis.entity.projectile.PlayerProjectile;
 import com.mcai8sh4.nemesis.entity.projectile.Projectile;
+import com.mcai8sh4.nemesis.graphics.AnimatedSprite;
 import com.mcai8sh4.nemesis.graphics.Screen;
 import com.mcai8sh4.nemesis.graphics.Sprite;
+import com.mcai8sh4.nemesis.graphics.SpriteSheet;
 import com.mcai8sh4.nemesis.input.Keyboard;
 import com.mcai8sh4.nemesis.input.Mouse;
-import com.mcai8sh4.nemesis.level.Level;
 import com.mcai8sh4.nemesis.level.tile.Tile;
+
+import java.util.List;
 
 
 public class Player extends Mob {
@@ -16,8 +20,14 @@ public class Player extends Mob {
     private Keyboard input;
     private Sprite sprite;
     private int anim = 0;
+    private int flip = 0;
     private boolean walking = false;
+    private AnimatedSprite down = new AnimatedSprite(SpriteSheet.player_down, 32, 32, 2);
+    private AnimatedSprite up = new AnimatedSprite(SpriteSheet.player_up, 32, 32, 2);
+    private AnimatedSprite left = new AnimatedSprite(SpriteSheet.player_left, 32, 32, 2);
+    private AnimatedSprite right = new AnimatedSprite(SpriteSheet.player_right, 32, 32, 2);
 
+    private AnimatedSprite animSprite = down;
     Projectile p;
     private int fireRate = 0;
 
@@ -35,20 +45,35 @@ public class Player extends Mob {
     }
 
     public void update() {
+
+        if (walking) animSprite.update();
+        else animSprite.setFrame(0);
         if (fireRate > 0) fireRate--;
-        int xa = 0, ya = 0;
-        int speed = 2; // Player movement speed
+        double xa = 0, ya = 0;
+        double speed = 1.0; // Player movement speed
         int running; // value to increase speed - ie. running incrementation
         if (input.run) running = 1;
         else running = 0;
 
-        if (anim < 7500) anim += 1 + running;
-        else anim = 0;
 
-        if (input.up) ya -= speed + running;
-        if (input.down) ya += speed + running;
-        if (input.left) xa -= speed + running;
-        if (input.right) xa += speed + running;
+        if (input.up) {
+            animSprite = up;
+            ya -= speed + running;
+            flip =0;
+        } else if (input.down) {
+            animSprite = down;
+            ya += speed + running;
+            flip=0;
+        }
+        if (input.left) {
+            animSprite = left;
+            xa -= speed + running;
+            flip =1;
+        } else if (input.right) {
+            animSprite = right;
+            xa += speed + running;
+            flip =0;
+        }
 
         if (xa != 0 || ya != 0) {
             move(xa, ya);
@@ -79,54 +104,11 @@ public class Player extends Mob {
     }
 
     public void render(Screen screen) {
-        int flip = 0;
-//        sprite = Sprite.player_forward;
-        if (dir == 0) {
-            if (walking) {
-                if (anim % 20 > 10) {
-                    sprite = Sprite.player_forward_1;
-                } else {
-                    flip = 1;
-                    sprite = Sprite.player_forward_1;
-                }
 
-            }
-        }
-        if (dir == 2) {
-            sprite = Sprite.player_back;
-            if (walking) {
-                if (anim % 20 > 10) {
-                    sprite = Sprite.player_back_1;
-                } else {
-                    flip = 1;
-                    sprite = Sprite.player_back_1;
-                }
-            }
-        }
-        if (dir == 1) {
-            sprite = Sprite.player_side;
-            if (walking) {
-                if (anim % 20 > 10) {
-                    sprite = Sprite.player_side_1;
-                } else {
-                    sprite = Sprite.player_side;
-                }
-            }
-        }
-        if (dir == 3) {
-            sprite = Sprite.player_side;
-            flip = 1;
-            if (walking) {
-                if (anim % 20 > 10) {
-                    sprite = Sprite.player_side_1;
-                } else {
-                    sprite = Sprite.player_side;
-                }
-            }
-        }
-        screen.renderPlayer(x - 16, y - 16, sprite, flip);
+        sprite = animSprite.getSprite();
+        screen.renderMob((int)(x - 16),(int) (y - 16), sprite, flip);
+        if (dir == Direction.UP) sprite = Sprite.player_forward;
 
-        if (dir == 0) sprite = Sprite.player_forward;
     }
 
 
