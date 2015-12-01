@@ -50,7 +50,7 @@ public class Player extends Mob {
         else animSprite.setFrame(0);
         if (fireRate > 0) fireRate--;
         double xa = 0, ya = 0;
-        double speed = 1.0; // Player movement speed
+        double speed = 1.5; // Player movement speed
         int running; // value to increase speed - ie. running incrementation
         if (input.run) running = 1;
         else running = 0;

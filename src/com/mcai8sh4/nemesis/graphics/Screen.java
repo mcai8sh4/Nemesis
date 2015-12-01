@@ -2,6 +2,7 @@ package com.mcai8sh4.nemesis.graphics;
 
 import com.mcai8sh4.nemesis.entity.mob.Chaser;
 import com.mcai8sh4.nemesis.entity.mob.Mob;
+import com.mcai8sh4.nemesis.entity.mob.Star;
 import com.mcai8sh4.nemesis.entity.projectile.Projectile;
 import com.mcai8sh4.nemesis.level.tile.Tile;
 
@@ -130,6 +131,7 @@ public class Screen {
                 if (xa < 0) xa = 0;
                 int col = mob.getSprite().pixels[xs + ys * 32];
                 if (mob instanceof Chaser && col == 0xFF472BBF) col = 0xffBA0015;
+                if (mob instanceof Star && col == 0xFF472BBF) col = 0xffE8E83A;
                 if (col != 0xFFFF00FF) pixels[xa + ya * width] = col;
             }
         }

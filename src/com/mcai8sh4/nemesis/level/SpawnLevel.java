@@ -2,6 +2,7 @@ package com.mcai8sh4.nemesis.level;
 
 import com.mcai8sh4.nemesis.entity.mob.Chaser;
 import com.mcai8sh4.nemesis.entity.mob.Dummy;
+import com.mcai8sh4.nemesis.entity.mob.Star;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -29,8 +30,8 @@ public class SpawnLevel extends Level {
         for (int i = 0; i < 5; i++)
             add(new Dummy(20, 5));
         add(new Chaser(20, 6));
+        add(new Star(22, 12));
     }
-
 
     // Grass = 0x00ff00
     // Flower = 0xFFFF00

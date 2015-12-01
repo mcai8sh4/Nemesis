@@ -5,7 +5,6 @@ import com.mcai8sh4.nemesis.graphics.Sprite;
 import com.mcai8sh4.nemesis.level.tile.spawnLevel.*;
 
 public class Tile {
-    public int x, y;
     public Sprite sprite;
 
     public static Tile grass = new GrassTile(Sprite.grass);

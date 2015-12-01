@@ -155,7 +155,7 @@ public class Game extends Canvas implements Runnable {
                           Font("Verdana", 0, 12)
 
         );
-        g.drawString("X: " + player.getX() + ", Y: " + player.getY() + Screen.msg_1, 10, 15);
+        g.drawString("X: " + (player.getX()/16) + ", Y: " + player.getY()/16 + Screen.msg_1, 10, 15);
         g.drawString(Screen.msg, 10, 32);
         if (Mouse.getButton() != -1) g.drawString("Mouse : " + Mouse.getButton(), 10, 49);
         g.setColor(Color.ORANGE);

@@ -29,6 +29,7 @@ public class Dummy extends Mob {
 
     public void update() {
         time++;
+
         if (time % (random.nextInt(50) + 30) == 0) {
             xa = random.nextInt(3) - 1;
             ya = random.nextInt(3) - 1;
